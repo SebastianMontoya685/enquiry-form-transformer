@@ -1,0 +1,40 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy seminar-receiver
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Grab your code
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      # 2) Authenticate with your GCP service account
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      # 3) Install gcloud + beta components
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: avian-cosmos-458703-g3
+          install_components: |
+            beta
+
+      # 4) Build & deploy via your Dockerfile (clearing the old base-image)
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy enquiry-form-transformer \
+            --source . \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --clear-base-image
