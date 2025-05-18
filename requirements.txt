@@ -1,1 +1,15 @@
-functions-framework==3.*
+# The Functions Framework itself
+functions-framework>=3.0.0
+
+# Google Pub/Sub client
+google-cloud-pubsub>=2.29.0
+
+# HTTP library for outgoing webhooks, etc.
+requests>=2.32.3
+
+# Slack SDK (you’re using it below)
+slack-sdk>=3.20.0
+
+# Optional helpers
+google-cloud-logging>=3.0.0
+python-dotenv>=1.0.0
